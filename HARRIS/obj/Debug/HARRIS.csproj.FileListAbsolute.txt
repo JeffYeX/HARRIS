@@ -1,0 +1,9 @@
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\HARRIS.exe.config
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\HARRIS.exe
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\HARRIS.pdb
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.csprojResolveAssemblyReference.cache
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.MainForm.resources
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.Properties.Resources.resources
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.csproj.GenerateResource.Cache
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.exe
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.pdb
