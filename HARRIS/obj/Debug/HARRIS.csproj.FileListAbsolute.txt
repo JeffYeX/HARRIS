@@ -17,3 +17,32 @@ C:\Users\Rorschach\source\repos\HARRIS\HARRIS\obj\Debug\HARRIS.csproj.GenerateRe
 C:\Users\Rorschach\source\repos\HARRIS\HARRIS\obj\Debug\HARRIS.csproj.CoreCompileInputs.cache
 C:\Users\Rorschach\source\repos\HARRIS\HARRIS\obj\Debug\HARRIS.exe
 C:\Users\Rorschach\source\repos\HARRIS\HARRIS\obj\Debug\HARRIS.pdb
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x64\concrt140.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x64\cvextern.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x64\msvcp140.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x64\opencv_ffmpeg341_64.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x64\vcruntime140.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x86\concrt140.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x86\cvextern.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x86\msvcp140.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x86\opencv_ffmpeg341.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x86\vcruntime140.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\Emgu.CV.UI.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\Emgu.CV.World.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\ZedGraph.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\Emgu.CV.UI.xml
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\Emgu.CV.World.xml
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\ZedGraph.xml
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\de\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\es\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\fr\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\hu\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\it\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\ja\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\pt\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\ru\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\sk\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\sv\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\tr\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\zh-cn\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\zh-tw\ZedGraph.resources.dll
