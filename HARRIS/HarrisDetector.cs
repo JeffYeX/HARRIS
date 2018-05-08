@@ -41,8 +41,8 @@ namespace HARRIS
             //var diffy = new float[height, width];
             //var diffxy = new float[height, width];
             var resultList = ComputeDerivatives(image, matrixImage);
-            var mDerivatives = ApplyGaussToDerivatives(resultList, size);
-            var harrisResponses = ComputeHarrisResponses(mDerivatives);
+            //var mDerivatives = ApplyGaussToDerivatives(resultList, size);
+            var harrisResponses = ComputeHarrisResponses(resultList);
             m_harrisResponses = harrisResponses;
         }
 
@@ -69,23 +69,32 @@ namespace HARRIS
 
         private List<Matrix<float>> ComputeDerivatives(Image image, Matrix<byte> matrixImage)
         {
-            var vercerticalSobelM = new Matrix<float>(matrixImage.Rows - 2, matrixImage.Cols);
-            for (var r = 1; r < matrixImage.Rows - 1; r++)
+            var verticalSobelM = new Matrix<float>(matrixImage.Rows - 1, matrixImage.Cols - 1);
+            var horizontalSobelM = new Matrix<float>(matrixImage.Rows - 1, matrixImage.Cols - 1);
+            //verticalSobelM.Data[0, 0] = 0;
+            //horizontalSobelM.Data[0, 0] = 0;
+
+            for (var r = 1; r < matrixImage.Rows - 2; r++)
             {
                 //Console.WriteLine("r:" + r);
-                for (var c = 0; c < matrixImage.Cols; c++)
+                for (var c = 1; c < matrixImage.Cols - 2; c++)
                 {
                     //Console.WriteLine(" c:" + c);
-                    var a1 = matrixImage.Data[r - 1, c];
+                    var v1 = matrixImage.Data[r - 1, c];
                     //Console.WriteLine(" test");
-                    var a2 = matrixImage.Data[r, c];
-                    var a3 = matrixImage.Data[r + 1, c];
+                    var v2 = matrixImage.Data[r, c];
+                    var v3 = matrixImage.Data[r + 1, c];
+                    verticalSobelM.Data[r, c] = v1 + v2 + v3;
 
-                    vercerticalSobelM.Data[r - 1, c] = a1 + a2 + a3;
+                    var h1 = matrixImage.Data[r, c - 1];
+                    //Console.WriteLine(" test");
+                    var h2 = matrixImage.Data[r, c];
+                    var h3 = matrixImage.Data[r, c + 1];
+                    horizontalSobelM.Data[r, c] = h1 + h2 + h3;
                 }
             }
-
-            var horizontalSobelM = new Matrix<float>(matrixImage.Rows, matrixImage.Cols - 2);
+            /*
+            //var horizontalSobelM = new Matrix<float>(matrixImage.Rows, matrixImage.Cols - 2);
             for (var r = 0; r < matrixImage.Rows; r++)
             {
                 //Console.WriteLine("r:" + r);
@@ -100,18 +109,18 @@ namespace HARRIS
                     horizontalSobelM.Data[r, c - 1] = a1 + a2 + a3;
                 }
             }
+            */
+            var dx = new Matrix<float>(matrixImage.Rows - 1, matrixImage.Cols - 1);
+            var dy = new Matrix<float>(matrixImage.Rows - 1, matrixImage.Cols - 1);
+            var dxy = new Matrix<float>(matrixImage.Rows - 1, matrixImage.Cols - 1);
 
-            var dx = new Matrix<float>(matrixImage.Rows - 2, matrixImage.Cols - 2);
-            var dy = new Matrix<float>(matrixImage.Rows - 2, matrixImage.Cols - 2);
-            var dxy = new Matrix<float>(matrixImage.Rows - 2, matrixImage.Cols - 2);
-
-            for (int r = 0; r < matrixImage.Rows - 2; r++)
+            for (int r = 1; r < matrixImage.Rows - 2; r++)
             {
-                for (int c = 0; c < matrixImage.Cols - 2; c++)
+                for (int c = 1; c < matrixImage.Cols - 2; c++)
                 {
                     //Console.WriteLine("r:" + r + "c:" + c);
-                    var h = (horizontalSobelM.Data[r, c] - horizontalSobelM.Data[r + 2, c])*0.166666667f;
-                    var v = (vercerticalSobelM.Data[r, c] - vercerticalSobelM.Data[r, c + 2])*0.166666667f;
+                    var h = (horizontalSobelM.Data[r, c] - horizontalSobelM.Data[r + 1, c])*0.166666667f;
+                    var v = (verticalSobelM.Data[r, c] - verticalSobelM.Data[r, c + 1])*0.166666667f;
                     dx.Data[r, c] = h*h;
                     dy.Data[r, c] = v*v;
                     dxy.Data[r, c] = h*v;
@@ -249,17 +258,17 @@ namespace HARRIS
                     var dxy = mDerivatives[2][r, c];
                     //var a12 = mDerivatives[0][r, c] * mDerivatives[1][r, c];
 
-                    var det = dx * dy - dxy * dxy;
+                    var det = dx * dy;// - dxy * dxy;
                     var trace = dx + dy;
 
                     //var M = Math.Abs(det - k * trace * trace);
 
-                    var edgeMeasure = Math.Abs(det - k * trace * trace);
+                    var edgeMeasure = det - k * trace * trace;
                     //Console.WriteLine(edgeMeasure);
                     if (edgeMeasure > threshold)
                     {
                         result[r, c] = edgeMeasure;
-                        Console.WriteLine(edgeMeasure);
+                        //Console.WriteLine(edgeMeasure);
                     }
 
                     //result[r, c] = Math.Abs(det - k * trace * trace);
