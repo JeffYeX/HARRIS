@@ -1,12 +1,3 @@
-c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\HARRIS.exe.config
-c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\HARRIS.exe
-c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\HARRIS.pdb
-c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.csprojResolveAssemblyReference.cache
-c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.MainForm.resources
-c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.Properties.Resources.resources
-c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.csproj.GenerateResource.Cache
-c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.exe
-c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.pdb
 C:\Users\Rorschach\source\repos\HARRIS\HARRIS\bin\Debug\HARRIS.exe.config
 C:\Users\Rorschach\source\repos\HARRIS\HARRIS\bin\Debug\HARRIS.exe
 C:\Users\Rorschach\source\repos\HARRIS\HARRIS\bin\Debug\HARRIS.pdb
@@ -27,6 +18,9 @@ c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x8
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x86\msvcp140.dll
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x86\opencv_ffmpeg341.dll
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\x86\vcruntime140.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\HARRIS.exe.config
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\HARRIS.exe
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\HARRIS.pdb
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\Emgu.CV.UI.dll
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\Emgu.CV.World.dll
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\ZedGraph.dll
@@ -46,3 +40,8 @@ c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\sv
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\tr\ZedGraph.resources.dll
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\zh-cn\ZedGraph.resources.dll
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\bin\Debug\zh-tw\ZedGraph.resources.dll
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.MainForm.resources
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.Properties.Resources.resources
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.csproj.GenerateResource.Cache
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.exe
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.pdb

@@ -11,16 +11,16 @@ namespace HARRIS
 {
     class HarrisDetector
     {
-        private float k = 0.25f;
+        private float k;
         private float threshold;
-        private float percentage = 0.1f;
+        //private float percentage = 0.1f;
 
-        private int maximaSuppressionDimension = 10;
+        //private int maximaSuppressionDimension = 10;
 
-        private int suppressionParm= 3;
+        private readonly int suppressionParm= 3;
 
         // Gaussian smoothing parameters
-        private int size = 3;
+        private readonly int size = 3;
 
         private float[,] m_harrisResponses;
 
@@ -29,7 +29,7 @@ namespace HARRIS
         /// <summary>
         ///   Initializes a new instance of the <see cref="HarrisCornersDetector"/> class.
         /// </summary>
-        public HarrisDetector(Image image, Matrix<byte> matrixImage, float threshold)
+        public HarrisDetector(Image image, Matrix<byte> matrixImage, float k, float threshold)
         {
             Initialize(k, threshold);
             //var width = image.Width;
@@ -42,7 +42,7 @@ namespace HARRIS
             //var diffxy = new float[height, width];
             var resultList = ComputeDerivatives(image, matrixImage);
             var mDerivatives = ApplyGaussToDerivatives(resultList, size);
-            var harrisResponses = ComputeHarrisResponses(k, mDerivatives);
+            var harrisResponses = ComputeHarrisResponses(mDerivatives);
             m_harrisResponses = harrisResponses;
         }
 
@@ -110,9 +110,11 @@ namespace HARRIS
                 for (int c = 0; c < matrixImage.Cols - 2; c++)
                 {
                     //Console.WriteLine("r:" + r + "c:" + c);
-                    dx.Data[r, c] = horizontalSobelM.Data[r, c] - horizontalSobelM.Data[r + 1, c];
-                    dy.Data[r, c] = vercerticalSobelM.Data[r, c] - vercerticalSobelM.Data[r, c + 1];
-                    dxy.Data[r, c] = dx.Data[r, c] * dy.Data[r, c];
+                    var h = (horizontalSobelM.Data[r, c] - horizontalSobelM.Data[r + 2, c])*0.166666667f;
+                    var v = (vercerticalSobelM.Data[r, c] - vercerticalSobelM.Data[r, c + 2])*0.166666667f;
+                    dx.Data[r, c] = h*h;
+                    dy.Data[r, c] = v*v;
+                    dxy.Data[r, c] = h*v;
                 }
             }
 
@@ -235,15 +237,15 @@ namespace HARRIS
             return gaussResult;
         }
 
-        private float[,] ComputeHarrisResponses(float k, List<Matrix<float>> mDerivatives)
+        private float[,] ComputeHarrisResponses(List<Matrix<float>> mDerivatives)
         {
             var result = new float[mDerivatives[1].Rows, mDerivatives[0].Cols];
             for (int r = 0; r < mDerivatives[1].Rows; r++)
             {
                 for (int c = 0; c < mDerivatives[1].Cols; c++)
                 {
-                    var dx = mDerivatives[0][r, c] * mDerivatives[0][r, c];
-                    var dy = mDerivatives[1][r, c] * mDerivatives[1][r, c];
+                    var dx = mDerivatives[0][r, c];// * mDerivatives[0][r, c];
+                    var dy = mDerivatives[1][r, c];// * mDerivatives[1][r, c];
                     var dxy = mDerivatives[2][r, c];
                     //var a12 = mDerivatives[0][r, c] * mDerivatives[1][r, c];
 
@@ -252,10 +254,12 @@ namespace HARRIS
 
                     //var M = Math.Abs(det - k * trace * trace);
 
-                    var cornerMeasure = Math.Abs(det - k * trace * trace);
-                    if (cornerMeasure > threshold)
+                    var edgeMeasure = Math.Abs(det - k * trace * trace);
+                    //Console.WriteLine(edgeMeasure);
+                    if (edgeMeasure > threshold)
                     {
-                        result[r, c] = cornerMeasure;
+                        result[r, c] = edgeMeasure;
+                        Console.WriteLine(edgeMeasure);
                     }
 
                     //result[r, c] = Math.Abs(det - k * trace * trace);
@@ -280,7 +284,7 @@ namespace HARRIS
                 {
                     var currentValue = m_harrisResponses[y, x];
 
-                    for (int i = -suppressionParm; (currentValue != 0) && (i <= suppressionParm); i++)
+                    for (int i = -suppressionParm; (currentValue != 0.0) && (i <= suppressionParm); i++)
                     {
                         for (int j = -suppressionParm; j <= suppressionParm; j++)
                         {

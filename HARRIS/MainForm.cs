@@ -15,8 +15,9 @@ namespace HARRIS
 {
     public partial class MainForm : Form
     {
-        Image _grayImage;
-        Matrix<byte> matrixImage;
+        private Image _grayImage;
+        private Matrix<byte> _matrixImage;
+        private Graphics _g;
 
         public MainForm()
         {
@@ -38,21 +39,19 @@ namespace HARRIS
             try
             {
                 var ofd = new OpenFileDialog();
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    //Image blah = new
-                    var inputImage = new Bitmap(ofd.FileName);
-                    var matImage = new Mat(new Size(inputImage.Width, inputImage.Height), DepthType.Cv32F, 1);
-                    matImage = CvInvoke.Imread(ofd.FileName, ImreadModes.Grayscale);
+                if (ofd.ShowDialog() != DialogResult.OK) return;
+                //Image blah = new
+                var inputImage = new Bitmap(ofd.FileName);
+                //var matImage = new Mat(new Size(inputImage.Width, inputImage.Height), DepthType.Cv32F, 1);
+                var matImage = CvInvoke.Imread(ofd.FileName, ImreadModes.Grayscale);
                     
-                    //matrixImage = new Matrix<float>(matImage.Rows, matImage.Cols);
-                    //matImage.CopyTo(matrixImage);
-                    matrixImage = new Matrix<byte>(matImage.Rows, matImage.Cols);
-                    matImage.CopyTo(matrixImage);
-                    _grayImage = MakeGrayscale3(inputImage);
-                    //_grayImage = ToolStripRenderer.CreateDisabledImage(inputImage);
-                    pictureBox1.Image = _grayImage;
-                }
+                //_matrixImage = new Matrix<float>(matImage.Rows, matImage.Cols);
+                //matImage.CopyTo(_matrixImage);
+                _matrixImage = new Matrix<byte>(matImage.Rows, matImage.Cols);
+                matImage.CopyTo(_matrixImage);
+                _grayImage = MakeGrayscale3(inputImage);
+                //_grayImage = ToolStripRenderer.CreateDisabledImage(inputImage);
+                pictureBox1.Image = _grayImage;
             }
             catch (Exception)
             {
@@ -73,18 +72,26 @@ namespace HARRIS
             //var diffx = new float[height, width];
             //var diffy = new float[height, width];
             //var diffxy = new float[height, width];
-            float k = 0.25f;
-            float threshold = 200000000f;
-            float percentage = 0.1f;
+            //float k = 0.25f;
+            //_g.Clear(Color.Transparent);
 
-            int maximaSuppressionDimension = 10;
-            int size = 3;
+            //pictureBox1.Image = _grayImage;
+            var k = (float) numK.Value;
+            var threshold = (float) numThreshold.Value;
+            //float threshold = 200000000f;
+            //float percentage = 0.1f;
+            _g = Graphics.FromImage(_grayImage);
+            //_g.Clear(Color.Transparent);
+            
+            //pictureBox1.Image = _grayImage;
+            //int maximaSuppressionDimension = 10;
+            //int size = 3;
 
-            var harris = new HarrisDetector(_grayImage, matrixImage, threshold);
+            var harris = new HarrisDetector(_grayImage, _matrixImage, k, threshold);
 
             //var blah = harris.ReturnHarris();
             /*
-            Graphics g = Graphics.FromImage(_grayImage);
+            Graphics _g = Graphics.FromImage(_grayImage);
             for (int i = 0; i < resPts.Count; i++)
             {
                 for (int c = 0; c < resPts[]; c++)
@@ -92,35 +99,24 @@ namespace HARRIS
                     if (blah[i, c] > 1.0 * Math.Pow(10, 28))
                     {
 
-                        PaintCross(g, new Point(i, c));
+                        PaintCross(_g, new Point(i, c));
                     }
                 }
             }
             */
             //var resPts = harris.GetMaximaPoints(percetage, size, maximaSuppressionDimension);
             var resPts = harris.GetMaximaPoints();
-            Graphics g = Graphics.FromImage(_grayImage);
+            
             foreach (var point in resPts)
             {
-                PaintCross(g, new Point(point[0,0], point[0,1]));
+                PaintCross(_g, new Point(point[0,0], point[0,1]));
             }
-
+            //pictureBox1.Image = _grayImage;
+            Refresh();
+            //pictureBox1.Image = _grayImage;
         }
 
-        private Matrix<float> ConvertToGray(Matrix<float> image)
-        {
-            var greyImage = new Matrix<float>(image.Rows, image.Cols);
-            for (int c = 0; c < image.Cols; c++)
-            {
-                for (int r = 0; r < image.Rows; r++)
-                {
-                    //greyImage.Data[r, c] = 0.2126*image.Data[r, c]
-                }
-            }
-            return greyImage;
-        }
-
-        public static Bitmap MakeGrayscale3(Bitmap original)
+        private Bitmap MakeGrayscale3(Bitmap original)
         {
             //create a blank bitmap the same size as original
             Bitmap newBitmap = new Bitmap(original.Width, original.Height);
@@ -152,7 +148,7 @@ namespace HARRIS
         private void PaintCross(Graphics g, Point loc)
         {
             //Half length of the line.
-            const int HALF_LEN = 5;
+            const int HALF_LEN = 2;
 
             //Draw horizontal line.
 
