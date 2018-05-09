@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -27,11 +22,6 @@ namespace HARRIS
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
@@ -39,40 +29,26 @@ namespace HARRIS
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                _ofd = new OpenFileDialog();
-                if (_ofd.ShowDialog() != DialogResult.OK) return;
-                //Image blah = new
-                var inputImage = new Bitmap(_ofd.FileName);
-                //var matImage = new Mat(new Size(inputImage.Width, inputImage.Height), DepthType.Cv32F, 1);
-                var matImage = CvInvoke.Imread(_ofd.FileName, ImreadModes.Grayscale);
-                    
-                //_matrixImage = new Matrix<float>(matImage.Rows, matImage.Cols);
-                //matImage.CopyTo(_matrixImage);
-                _matrixImage = new Matrix<byte>(matImage.Rows, matImage.Cols);
-                matImage.CopyTo(_matrixImage);
-                _grayImage = MakeGrayscale3(inputImage);
-                //_grayImage = ToolStripRenderer.CreateDisabledImage(inputImage);
-                pictureBox1.Image = _grayImage;
-            }
-            catch (Exception)
-            {
-                
-                throw;
-            }
+            _ofd = new OpenFileDialog();
+            if (_ofd.ShowDialog() != DialogResult.OK) return;
+            var inputImage = new Bitmap(_ofd.FileName);
+            var matImage = CvInvoke.Imread(_ofd.FileName, ImreadModes.Grayscale);
+            _matrixImage = new Matrix<byte>(matImage.Rows, matImage.Cols);
+            matImage.CopyTo(_matrixImage);
+            _grayImage = MakeGrayscale3(inputImage);
+            pictureBox1.Image = _grayImage;
         }
 
         private void savePointsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var spd = new SaveFileDialog
             {
-                Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*",
+                Filter = @"txt files (*.txt)|*.txt|All files (*.*)|*.*",
                 FileName = "Points",
                 DefaultExt = "txt"
             };
             if (spd.ShowDialog() != DialogResult.OK) return;
-            using (StreamWriter bw = new StreamWriter(File.Create(spd.FileName)))
+            using (var bw = new StreamWriter(File.Create(spd.FileName)))
             {
                 foreach (var points in _resPts)
                 {
@@ -85,7 +61,7 @@ namespace HARRIS
         {
             var sid = new SaveFileDialog
             {
-                Filter = "jpg files (*.jpg)|*.jpg|All files (*.*)|*.*",
+                Filter = @"jpg files (*.jpg)|*.jpg|All files (*.*)|*.*",
                 FileName = "Image",
                 DefaultExt = "jpg"
             };
@@ -96,69 +72,24 @@ namespace HARRIS
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // get source image size
-            //var width = _grayImage.Width;
-            //var height = _grayImage.Height;
-            //var srcStride = _grayImage.Stride;
-            //var srcOffset = srcStride - width;
-
-            // 1. Calculate partial differences
-            //var diffx = new float[height, width];
-            //var diffy = new float[height, width];
-            //var diffxy = new float[height, width];
-            //float k = 0.25f;
-            //_g.Clear(Color.Transparent);
-
-            //pictureBox1.Image = _grayImage;
             var k = (float) numK.Value;
             var threshold = (float) numThreshold.Value;
             var gaussCheckBox = checkBox1.Checked;
             var detectEdgesOnly = checkBox2.Checked;
-            //float threshold = 200000000f;
-            //float percentage = 0.1f;
-            _g = Graphics.FromImage(_grayImage);
-            //_g.Clear(Color.Transparent);
-            
-            //pictureBox1.Image = _grayImage;
-            //int maximaSuppressionDimension = 10;
-            //int size = 3;
 
-            var harris = new HarrisDetector(_grayImage, _matrixImage, k, threshold, gaussCheckBox, detectEdgesOnly);
-
-            //var blah = harris.ReturnHarris();
-            /*
-            Graphics _g = Graphics.FromImage(_grayImage);
-            for (int i = 0; i < _resPts.Count; i++)
-            {
-                for (int c = 0; c < _resPts[]; c++)
-                {
-                    if (blah[i, c] > 1.0 * Math.Pow(10, 28))
-                    {
-
-                        PaintCross(_g, new Point(i, c));
-                    }
-                }
-            }
-            */
-            //var _resPts = harris.GetMaximaPoints(percetage, size, maximaSuppressionDimension);
+            var harris = new HarrisDetector(_matrixImage, k, threshold, gaussCheckBox, detectEdgesOnly);
             _resPts = detectEdgesOnly ? harris.ReturnEdgePoints() : harris.GetMaximaPoints();
-            
+
+            _g = Graphics.FromImage(_grayImage);
             foreach (var point in _resPts)
             {
                 PaintCross(_g, new Point(point[0,0], point[0,1]));
             }
-            //pictureBox1.Image = _grayImage;
             Refresh();
-            //pictureBox1.Image = _grayImage;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //_g.Clear(Color.Blue);
-            //_g = Graphics.FromImage(_grayImage);
-            //pictureBox1.Invalidate();
-
-            //_grayImage = new Bitmap("C:\\Users\\JeffYe\\Pictures\\lena512.bmp");
             _grayImage = MakeGrayscale3(new Bitmap(_ofd.FileName));
             pictureBox1.Image = _grayImage;
             Refresh();
@@ -166,12 +97,13 @@ namespace HARRIS
 
         private Bitmap MakeGrayscale3(Bitmap original)
         {
+            if (original == null) throw new ArgumentNullException(nameof(original));
             //create a blank bitmap the same size as original
-            Bitmap newBitmap = new Bitmap(original.Width, original.Height);
+            var newBitmap = new Bitmap(original.Width, original.Height);
             //get a graphics object from the new image
-            Graphics g = Graphics.FromImage(newBitmap);
+            var g = Graphics.FromImage(newBitmap);
             //create the grayscale ColorMatrix
-            ColorMatrix colorMatrix = new ColorMatrix(
+            var colorMatrix = new ColorMatrix(
                new float[][]
               {
                  new float[] {.3f, .3f, .3f, 0, 0},
@@ -181,7 +113,7 @@ namespace HARRIS
                  new float[] {0, 0, 0, 0, 1}
               });
             //create some image attributes
-            ImageAttributes attributes = new ImageAttributes();
+            var attributes = new ImageAttributes();
             //set the color matrix attribute
             attributes.SetColorMatrix(colorMatrix);
             //draw the original image on the new image
