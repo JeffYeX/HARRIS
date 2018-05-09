@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace HARRIS
         private Image _grayImage;
         private Matrix<byte> _matrixImage;
         private Graphics _g;
+        private OpenFileDialog _ofd;
+        private List<int[,]> _resPts;
 
         public MainForm()
         {
@@ -38,12 +41,12 @@ namespace HARRIS
         {
             try
             {
-                var ofd = new OpenFileDialog();
-                if (ofd.ShowDialog() != DialogResult.OK) return;
+                _ofd = new OpenFileDialog();
+                if (_ofd.ShowDialog() != DialogResult.OK) return;
                 //Image blah = new
-                var inputImage = new Bitmap(ofd.FileName);
+                var inputImage = new Bitmap(_ofd.FileName);
                 //var matImage = new Mat(new Size(inputImage.Width, inputImage.Height), DepthType.Cv32F, 1);
-                var matImage = CvInvoke.Imread(ofd.FileName, ImreadModes.Grayscale);
+                var matImage = CvInvoke.Imread(_ofd.FileName, ImreadModes.Grayscale);
                     
                 //_matrixImage = new Matrix<float>(matImage.Rows, matImage.Cols);
                 //matImage.CopyTo(_matrixImage);
@@ -58,6 +61,37 @@ namespace HARRIS
                 
                 throw;
             }
+        }
+
+        private void savePointsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var spd = new SaveFileDialog
+            {
+                Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*",
+                FileName = "Points",
+                DefaultExt = "txt"
+            };
+            if (spd.ShowDialog() != DialogResult.OK) return;
+            using (StreamWriter bw = new StreamWriter(File.Create(spd.FileName)))
+            {
+                foreach (var points in _resPts)
+                {
+                    bw.Write("X: {0}, Y: {1}\r\n", points[0,0], points[0,1]);
+                }
+            }
+        }
+
+        private void saveImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var sid = new SaveFileDialog
+            {
+                Filter = "jpg files (*.jpg)|*.jpg|All files (*.*)|*.*",
+                FileName = "Image",
+                DefaultExt = "jpg"
+            };
+            if (sid.ShowDialog() != DialogResult.OK) return;
+            _grayImage.Save(sid.FileName);
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -94,9 +128,9 @@ namespace HARRIS
             //var blah = harris.ReturnHarris();
             /*
             Graphics _g = Graphics.FromImage(_grayImage);
-            for (int i = 0; i < resPts.Count; i++)
+            for (int i = 0; i < _resPts.Count; i++)
             {
-                for (int c = 0; c < resPts[]; c++)
+                for (int c = 0; c < _resPts[]; c++)
                 {
                     if (blah[i, c] > 1.0 * Math.Pow(10, 28))
                     {
@@ -106,16 +140,28 @@ namespace HARRIS
                 }
             }
             */
-            //var resPts = harris.GetMaximaPoints(percetage, size, maximaSuppressionDimension);
-            var resPts = detectEdgesOnly ? harris.ReturnEdgePoints() : harris.GetMaximaPoints();
+            //var _resPts = harris.GetMaximaPoints(percetage, size, maximaSuppressionDimension);
+            _resPts = detectEdgesOnly ? harris.ReturnEdgePoints() : harris.GetMaximaPoints();
             
-            foreach (var point in resPts)
+            foreach (var point in _resPts)
             {
                 PaintCross(_g, new Point(point[0,0], point[0,1]));
             }
             //pictureBox1.Image = _grayImage;
             Refresh();
             //pictureBox1.Image = _grayImage;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //_g.Clear(Color.Blue);
+            //_g = Graphics.FromImage(_grayImage);
+            //pictureBox1.Invalidate();
+
+            //_grayImage = new Bitmap("C:\\Users\\JeffYe\\Pictures\\lena512.bmp");
+            _grayImage = MakeGrayscale3(new Bitmap(_ofd.FileName));
+            pictureBox1.Image = _grayImage;
+            Refresh();
         }
 
         private Bitmap MakeGrayscale3(Bitmap original)
@@ -169,6 +215,5 @@ namespace HARRIS
             g.DrawLine(Pens.Red, p1, p2);
 
         }
-
     }
 }
