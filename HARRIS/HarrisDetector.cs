@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Emgu.CV;
 
 namespace HARRIS
@@ -29,21 +30,30 @@ namespace HARRIS
         /// <summary>
         ///   Initializes a new instance of the <see cref="HarrisCornersDetector"/> class.
         /// </summary>
-        public HarrisDetector(Image image, Matrix<byte> matrixImage, float k, float threshold)
+        public HarrisDetector(Image image, Matrix<byte> matrixImage, float k, float threshold, bool gaussCheckBox, bool detectEdgesOnly)
         {
             Initialize(k, threshold);
             //var width = image.Width;
             //var height = image.Height;
             //var srcStride = _grayImage.Stride;
             //var srcOffset = srcStride - width;
-            //// 1. Calculate partial differences
+            //// 1. Calculate partial differences`
             //var diffx = new float[height, width];
             //var diffy = new float[height, width];
             //var diffxy = new float[height, width];
             var resultList = ComputeDerivatives(image, matrixImage);
+            if (gaussCheckBox)
+            {
+                var mDerivatives = ApplyGaussToDerivatives(resultList, size);
+                var harrisResponses = ComputeHarrisResponses(mDerivatives, detectEdgesOnly);
+                m_harrisResponses = harrisResponses;
+            }
+            else
+            {
+                var harrisResponses = ComputeHarrisResponses(resultList, detectEdgesOnly);
+                m_harrisResponses = harrisResponses;
+            }
             //var mDerivatives = ApplyGaussToDerivatives(resultList, size);
-            var harrisResponses = ComputeHarrisResponses(resultList);
-            m_harrisResponses = harrisResponses;
         }
 
         private void Initialize(float k, float threshold)
@@ -246,7 +256,7 @@ namespace HARRIS
             return gaussResult;
         }
 
-        private float[,] ComputeHarrisResponses(List<Matrix<float>> mDerivatives)
+        private float[,] ComputeHarrisResponses(List<Matrix<float>> mDerivatives, bool detectEdgesOnly)
         {
             var result = new float[mDerivatives[1].Rows, mDerivatives[0].Cols];
             for (int r = 0; r < mDerivatives[1].Rows; r++)
@@ -265,12 +275,14 @@ namespace HARRIS
 
                     var edgeMeasure = det - k * trace * trace;
                     //Console.WriteLine(edgeMeasure);
-                    if (edgeMeasure > threshold)
+                    if (detectEdgesOnly && edgeMeasure < 0)
                     {
                         result[r, c] = edgeMeasure;
-                        //Console.WriteLine(edgeMeasure);
                     }
-
+                    else if (edgeMeasure > threshold)
+                    {
+                        result[r, c] = edgeMeasure;
+                    }
                     //result[r, c] = Math.Abs(det - k * trace * trace);
                 }
             }
@@ -278,14 +290,25 @@ namespace HARRIS
             return result;
         }
 
-        public float[,] ReturnHarris()
+        public List<int[,]> ReturnEdgePoints()
         {
-            return m_harrisResponses;
+            var edgesList = new List<int[,]>();
+            for (int r = 0; r < m_harrisResponses.GetLength(0) - 2; r++)
+            {
+                for (int c = 0; c < m_harrisResponses.GetLength(1) - 2; c++)
+                {
+                    if (m_harrisResponses[r,c] < -threshold)
+                    {
+                        edgesList.Add(new[,] {{c, r}});
+                    }
+                }
+            }
+            return edgesList;
         }
 
         public List<int[,]> GetMaximaPoints()
         {
-            var cornersList = new List<int[,]> { };
+            var cornersList = new List<int[,]>();
             //var maximaSuppressionMat = new int[m_harrisResponses.GetLength(0), m_harrisResponses.GetLength(1)];
             for (int y = suppressionParm; y < m_harrisResponses.GetLength(0) - suppressionParm; y++)
             {
@@ -307,7 +330,7 @@ namespace HARRIS
 
                     if (currentValue != 0)
                     {
-                        cornersList.Add(new[,] { {x,y} });
+                        cornersList.Add(new[,] {{x, y}});
                     }
                 }
             }

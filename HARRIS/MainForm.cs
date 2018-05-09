@@ -78,6 +78,8 @@ namespace HARRIS
             //pictureBox1.Image = _grayImage;
             var k = (float) numK.Value;
             var threshold = (float) numThreshold.Value;
+            var gaussCheckBox = checkBox1.Checked;
+            var detectEdgesOnly = checkBox2.Checked;
             //float threshold = 200000000f;
             //float percentage = 0.1f;
             _g = Graphics.FromImage(_grayImage);
@@ -87,7 +89,7 @@ namespace HARRIS
             //int maximaSuppressionDimension = 10;
             //int size = 3;
 
-            var harris = new HarrisDetector(_grayImage, _matrixImage, k, threshold);
+            var harris = new HarrisDetector(_grayImage, _matrixImage, k, threshold, gaussCheckBox, detectEdgesOnly);
 
             //var blah = harris.ReturnHarris();
             /*
@@ -105,7 +107,7 @@ namespace HARRIS
             }
             */
             //var resPts = harris.GetMaximaPoints(percetage, size, maximaSuppressionDimension);
-            var resPts = harris.GetMaximaPoints();
+            var resPts = detectEdgesOnly ? harris.ReturnEdgePoints() : harris.GetMaximaPoints();
             
             foreach (var point in resPts)
             {
@@ -167,5 +169,6 @@ namespace HARRIS
             g.DrawLine(Pens.Red, p1, p2);
 
         }
+
     }
 }

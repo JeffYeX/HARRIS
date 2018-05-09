@@ -45,3 +45,4 @@ c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HA
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.csproj.GenerateResource.Cache
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.exe
 c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.pdb
+c:\users\jeffye\documents\visual studio 2015\Projects\HARRIS\HARRIS\obj\Debug\HARRIS.csprojResolveAssemblyReference.cache
